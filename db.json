@@ -1,0 +1,28 @@
+{
+  "tasks": [
+    {
+      "id": "1759195086015",
+      "author": "User1",
+      "text": "Hacer proyecto sena ",
+      "completed": true
+    },
+    {
+      "id": "1759195173717",
+      "author": "User2",
+      "text": "Hacer aseo en casa ",
+      "completed": true
+    },
+    {
+      "id": 1759196270769,
+      "author": "User1",
+      "text": "Proyecto final react",
+      "completed": false
+    },
+    {
+      "id": 1759198318059,
+      "author": "User2",
+      "text": "Ir a cita medica ",
+      "completed": false
+    }
+  ]
+}
