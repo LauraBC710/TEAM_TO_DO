@@ -3,8 +3,11 @@ import { useAuth } from "./context/authContext"
 import TaskForm from "./components/TaskForm"
 import TaskList from "./components/TaskList"
 import SearchInput from "./components/SearchInput"
-import { ToastContainer } from 'react-toastify'
 import axios from "axios"
+
+const apiClient = axios.create({
+  baseURL: `${import.meta.env.VITE_API_URL}/api`
+});
 
 export default function App() {
   const { user, logout } = useAuth()
@@ -12,50 +15,45 @@ export default function App() {
   const [search, setSearch] = useState("")
   const [loadingSearch, setLoadingSearch] = useState(false)
 
-  const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL
-});
-
   useEffect(() => {
     const fetchTasks = async () => {
-      const response = await fetch(API_URL)
-      const data = await response.json()
-      setTasks(data)
+      try {
+        const response = await apiClient.get('/tasks')
+        // Ordenamos las tareas por fecha de creación para que las más nuevas aparezcan primero
+        setTasks(response.data.sort((a, b) => b.id - a.id))
+      } catch (error) {
+        console.error("Error al cargar las tareas:", error)
+      }
     }
     fetchTasks()
-  }, [])
+  }, []) // Ahora el array de dependencias puede estar vacío
 
   const addTask = async (text) => {
     const newTask = {
-      id: Date.now(),
+      // JSON-Server genera el ID automáticamente, no es necesario enviarlo.
       author: user.username,
       text,
       completed: false,
     }
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newTask),
-    })
-    const savedTask = await response.json()
-    setTasks([savedTask, ...tasks])
+    try {
+      const response = await apiClient.post('/tasks', newTask)
+      const savedTask = response.data
+      setTasks([savedTask, ...tasks])
+    } catch (error) {
+      console.error("Error al añadir la tarea:", error)
+    }
   }
 
   const toggleTask = async (id) => {
     const taskToToggle = tasks.find(t => t.id === id)
     const updatedTask = { ...taskToToggle, completed: !taskToToggle.completed }
 
-    await fetch(`${API_URL}/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatedTask),
-    })
-
-    setTasks(tasks.map(t => (t.id === id ? updatedTask : t)))
+    try {
+      await apiClient.put(`/tasks/${id}`, updatedTask)
+      setTasks(tasks.map(t => (t.id === id ? updatedTask : t)))
+    } catch (error) {
+      console.error("Error al actualizar la tarea:", error)
+    }
   }
 
   const handleSearchChange = (value) => {
