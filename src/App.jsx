@@ -12,7 +12,9 @@ export default function App() {
   const [search, setSearch] = useState("")
   const [loadingSearch, setLoadingSearch] = useState(false)
 
-  const API_URL = 'http://localhost:8000/tasks'
+  const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_URL
+});
 
   useEffect(() => {
     const fetchTasks = async () => {

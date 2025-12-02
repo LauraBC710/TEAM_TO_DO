@@ -13,13 +13,13 @@
       "completed": true
     },
     {
-      "id": 1759196270769,
+      "id": "1759196270769",
       "author": "User1",
       "text": "Proyecto final react",
-      "completed": false
+      "completed": true
     },
     {
-      "id": 1759198318059,
+      "id": "1759198318059",
       "author": "User2",
       "text": "Ir a cita medica ",
       "completed": false

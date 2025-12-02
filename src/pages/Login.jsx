@@ -14,7 +14,7 @@ export default function Login() {
       login(username, password)
       setLoading(false)
     }, 1000)
-  }
+  } 
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black">
