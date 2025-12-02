@@ -48,7 +48,7 @@ team-to-do/
 └── vite.config.js
 ```
 
-## 🛠️ Instalación y uso
+## 🛠️ Desarrollo Local
 
 1. **Clona el repositorio:**
    ```sh
@@ -56,32 +56,53 @@ team-to-do/
    cd team-to-do
    ```
 
-2. **Instala las dependencias:**
+2. **Instala las dependencias del Frontend:**
    ```sh
    npm install
    ```
 
-3. **Simula el backend con JSON Server:**
-   - Asegúrate de tener instalado JSON Server globalmente:
+3. **Instala las dependencias y ejecuta el Backend:**
+   - Navega a la carpeta del backend:
      ```sh
-     npm install -g json-server
+     cd backend
      ```
-   - Inicia el servidor en el puerto 8000:
+   - Instala sus dependencias:
      ```sh
-     json-server db.json --port 8000
+     npm install
      ```
-   - El endpoint de tareas estará disponible en:  
-     `http://localhost:8000/tasks`
+   - Inicia el servidor API (se ejecutará en `http://localhost:8000`):
+     ```sh
+     npm start
+     ```
 
-4. **Inicia el servidor de desarrollo de React:**
+4. **Ejecuta el Frontend:**
+   - Vuelve a la carpeta raíz del proyecto.
+   - Inicia el servidor de desarrollo de Vite (se ejecutará en `http://localhost:5173`):
    ```sh
    npm run dev
    ```
 
-5. **Abre la app en tu navegador:**
-   ```
-   http://localhost:5173
-   ```
+## ☁️ Despliegue
+
+Esta aplicación está preparada para un despliegue separado del frontend y el backend.
+
+### Backend en Render
+
+1.  Crea un nuevo **Web Service** en Render y conéctalo a tu repositorio de GitHub.
+2.  En la configuración:
+    -   **Root Directory**: `backend`
+    -   **Build Command**: `npm install`
+    -   **Start Command**: `npm start`
+3.  Despliega el servicio. Render te proporcionará una URL pública para tu API (ej: `https://tu-api.onrender.com`).
+
+### Frontend en Vercel
+
+1.  Crea un nuevo **Project** en Vercel e importa el mismo repositorio de GitHub.
+2.  Vercel detectará que es un proyecto Vite.
+3.  Ve a la configuración del proyecto y añade una **Variable de Entorno**:
+    -   **Name**: `VITE_API_URL`
+    -   **Value**: La URL de tu backend desplegado en Render.
+4.  Despliega. ¡Tu aplicación estará en línea!
 
 ## 👤 Usuarios de prueba
 
