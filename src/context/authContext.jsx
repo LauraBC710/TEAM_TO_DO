@@ -7,7 +7,10 @@ import 'react-toastify/dist/ReactToastify.css'
 const AuthContext = createContext()
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
+  // 1. Intentamos leer el usuario del localStorage al iniciar.
+  const [user, setUser] = useState(() => {
+    return JSON.parse(localStorage.getItem('user')) || null;
+  });
   const navigate = useNavigate()
 
   const login = (username, password) => {
@@ -15,15 +18,19 @@ export function AuthProvider({ children }) {
     if ((username === 'User1' && password === 'User1Pass') ||
        (username === 'User2' && password === 'User2Pass')
     ) {
-      setUser({ username })
+      const userData = { username };
+      // 2. Guardamos el usuario en localStorage y en el estado.
+      localStorage.setItem('user', JSON.stringify(userData));
+      setUser(userData);
       toast.success('Inicio de sesión exitoso')
       navigate('/tareas')
     } else {
       toast.error('Credenciales incorrectas')
     }
   };
-
   const logout = () => {
+    // 3. Limpiamos el localStorage al cerrar sesión.
+    localStorage.removeItem('user');
     setUser(null)
     navigate('/login')
   }

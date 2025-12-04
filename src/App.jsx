@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback, useMemo } from "react"
 import { useAuth } from "./context/authContext"
+import { toast } from "react-toastify"
 import TaskForm from "./components/TaskForm"
 import TaskList from "./components/TaskList"
 import SearchInput from "./components/SearchInput"
 import axios from "axios"
 
 const apiClient = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/api`
+  // Usamos la URL de tu backend desplegado en Railway
+  baseURL: "http://json-server-todo-production.up.railway.app/"
 });
 
 export default function App() {
@@ -14,61 +16,104 @@ export default function App() {
   const [tasks, setTasks] = useState([])
   const [search, setSearch] = useState("")
   const [loadingSearch, setLoadingSearch] = useState(false)
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    const controller = new AbortController();
     const fetchTasks = async () => {
+      setError(null);
       try {
-        const response = await apiClient.get('/tasks')
+        const response = await apiClient.get('/tasks', { signal: controller.signal })
         // Ordenamos las tareas por fecha de creación para que las más nuevas aparezcan primero
         setTasks(response.data.sort((a, b) => b.id - a.id))
       } catch (error) {
+        if (axios.isCancel(error)) return;
         console.error("Error al cargar las tareas:", error)
+        setError("No se pudieron cargar las tareas. Revisa la conexión con el backend.");
       }
     }
     fetchTasks()
-  }, []) // Ahora el array de dependencias puede estar vacío
 
-  const addTask = async (text) => {
+    return () => {
+      controller.abort();
+    }
+  }, [])
+
+  const addTask = useCallback(async (text) => {
     const newTask = {
-      // JSON-Server genera el ID automáticamente, no es necesario enviarlo.
       author: user.username,
       text,
       completed: false,
     }
     try {
       const response = await apiClient.post('/tasks', newTask)
-      const savedTask = response.data
-      setTasks([savedTask, ...tasks])
+      setTasks(prevTasks => [response.data, ...prevTasks])
+      toast.success("¡Tarea añadida con éxito!");
     } catch (error) {
       console.error("Error al añadir la tarea:", error)
+      toast.error("No se pudo añadir la tarea.");
     }
-  }
+  }, [user.username]);
 
-  const toggleTask = async (id) => {
-    const taskToToggle = tasks.find(t => t.id === id)
-    const updatedTask = { ...taskToToggle, completed: !taskToToggle.completed }
+  const toggleTask = useCallback(async (id) => {
+    const taskToToggle = tasks.find(t => t.id === id);
+    if (!taskToToggle) return;
+
+    const updatedTask = { ...taskToToggle, completed: !taskToToggle.completed };
 
     try {
-      await apiClient.put(`/tasks/${id}`, updatedTask)
-      setTasks(tasks.map(t => (t.id === id ? updatedTask : t)))
+      await apiClient.put(`/tasks/${id}`, updatedTask);
+      setTasks(prevTasks => prevTasks.map(t => (t.id === id ? updatedTask : t)));
     } catch (error) {
-      console.error("Error al actualizar la tarea:", error)
+      console.error("Error al actualizar la tarea:", error);
+      toast.error("No se pudo actualizar la tarea.");
     }
-  }
+  }, [tasks]);
 
-  const handleSearchChange = (value) => {
-    setLoadingSearch(true)
-    setSearch(value)
-    setTimeout(() => {
-      setLoadingSearch(false)
-    }, 700)
-  }
+  const deleteTask = useCallback(async (id) => {
+    // Guardamos la tarea por si necesitamos restaurarla
+    const originalTasks = [...tasks];
+    // Actualización optimista: eliminamos la tarea de la UI inmediatamente
+    setTasks(prevTasks => prevTasks.filter((t) => t.id !== id));
 
-  const filteredTasks = tasks.filter(
-    (t) =>
-      t.text.toLowerCase().includes(search.toLowerCase()) ||
-      t.author.toLowerCase().includes(search.toLowerCase())
-  )
+    try {
+      await apiClient.delete(`/tasks/${id}`);
+      toast.success("Tarea eliminada.");
+    } catch (error) {
+      console.error("Error al eliminar la tarea:", error);
+      toast.error("No se pudo eliminar la tarea.");
+      // Si hay un error, restauramos el estado original
+      setTasks(originalTasks);
+    }
+  }, [tasks]);
+
+  // Debounce para la búsqueda
+  useEffect(() => {
+    setLoadingSearch(true);
+    const timerId = setTimeout(() => {
+      setLoadingSearch(false);
+    }, 500); // Espera 500ms después de que el usuario deja de escribir
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [search]);
+
+  const handleSearchChange = useCallback((value) => {
+    setSearch(value);
+  }, []);
+
+  const filteredTasks = useMemo(() => {
+    if (!search) {
+      return tasks;
+    }
+    const lowercasedSearch = search.toLowerCase();
+    return tasks.filter(
+      (t) =>
+        t.text.toLowerCase().includes(lowercasedSearch) ||
+        t.author.toLowerCase().includes(lowercasedSearch)
+    );
+  }, [tasks, search]);
 
   return (
     <div className="min-h-screen bg-black p-6 text-gray-100">
@@ -89,6 +134,13 @@ export default function App() {
         </div>
       </div>
 
+      {/* Mostrar el mensaje de error si existe */}
+      {error && (
+        <div className="bg-red-500/20 border border-red-500 text-red-300 p-4 rounded-lg mb-4">
+          <strong>Error:</strong> {error}
+        </div>
+      )}
+
       <SearchInput search={search} setSearch={handleSearchChange} />
 
       {loadingSearch ? (
@@ -99,7 +151,11 @@ export default function App() {
       ) : (
         <>
           <TaskForm addTask={addTask} />
-          <TaskList tasks={filteredTasks} toggleTask={toggleTask} />
+          <TaskList
+            tasks={filteredTasks}
+            toggleTask={toggleTask}
+            deleteTask={deleteTask}
+          />
         </>
       )}
     </div>
