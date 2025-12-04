@@ -7,8 +7,8 @@ import SearchInput from "./components/SearchInput"
 import axios from "axios"
 
 const apiClient = axios.create({
-  // Usamos la URL de tu backend desplegado en Railway
-  baseURL: "http://json-server-todo-production.up.railway.app/"
+  // Leemos la URL del backend desde las variables de entorno de Vite
+  baseURL: import.meta.env.VITE_API_URL
 });
 
 export default function App() {
