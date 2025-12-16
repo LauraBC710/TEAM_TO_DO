@@ -84,6 +84,33 @@ Para desplegar tu propia versión, puedes seguir guías similares a las descrita
   Usuario: `User2`  
   Contraseña: `User2Pass`
 
+## 📂 Estructura de Carpetas
+
+La estructura del proyecto está organizada para separar las responsabilidades y facilitar el mantenimiento:
+
+```
+team-to-do/
+├── public/              # Archivos estáticos
+├── src/                 # Código fuente de la aplicación
+│   ├── components/      # Componentes reutilizables de React
+│   │   ├── PrivateRoute.jsx
+│   │   ├── SearchInput.jsx
+│   │   ├── TaskForm.jsx
+│   │   ├── TaskItem.jsx
+│   │   └── TaskList.jsx
+│   ├── context/         # Contexto de React (ej. para autenticación)
+│   │   └── authContext.jsx
+│   ├── pages/           # Componentes que representan páginas completas
+│   │   └── Login.jsx
+│   ├── App.jsx          # Componente raíz de la aplicación
+│   └── main.jsx         # Punto de entrada de la aplicación
+├── .env                 # Variables de entorno (local, no versionado)
+├── .env.example         # Ejemplo de variables de entorno
+├── db.json              # Base de datos para JSON Server
+├── package.json         # Dependencias y scripts del proyecto
+└── README.md            # Documentación del proyecto
+```
+
 ## 🧩 Principales archivos y componentes
 
 - [`src/App.jsx`](src/App.jsx): Componente principal, maneja tareas y autenticación. Consume la API de JSON Server para CRUD de tareas.
