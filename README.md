@@ -2,7 +2,14 @@
 
 Aplicación colaborativa de tareas construida con **React** y **Vite**. Permite a varios usuarios autenticarse y gestionar tareas en equipo, con almacenamiento local o simulación de backend usando JSON Server y una interfaz moderna usando TailwindCSS.
 
-## 🚀 Características
+## 🔗 Links de Producción
+
+- **Frontend (Netlify):** [https://guileless-marzipan-39c8a7.netlify.app/](https://guileless-marzipan-39c8a7.netlify.app/)
+- **Backend (Railway):** [https://json-server-todo-production.up.railway.app/tasks](https://json-server-todo-production.up.railway.app/tasks)
+
+---
+
+##  Características
 
 - Autenticación de usuarios (usuarios demo: `User1`/`User1Pass` y `User2`/`User2Pass`)
 - Añadir, buscar y marcar tareas como completadas
@@ -13,44 +20,26 @@ Aplicación colaborativa de tareas construida con **React** y **Vite**. Permite 
 - Rutas protegidas con React Router
 - Consumo de API REST usando `fetch` y `axios`
 
-## 📦 Estructura del proyecto
+## ️ Stack Tecnológico
 
-```
-team-to-do/
-├── public/
-│   └── vite.svg
-├── src/
-│   ├── assets/
-│   │   └── react.svg
-│   ├── components/
-│   │   ├── PrivateRoute.jsx
-│   │   ├── SearchInput.jsx
-│   │   ├── TaskForm.jsx
-│   │   ├── TaskItem.jsx
-│   │   └── TaskList.jsx
-│   ├── context/
-│   │   └── authContext.jsx
-│   ├── pages/
-│   │   └── Login.jsx
-│   ├── App.css
-│   ├── App.jsx
-│   ├── index.css
-│   └── main.jsx
-├── db.json
-├── .eslintrc.json
-├── .gitignore
-├── .prettierrc
-├── eslint.config.js
-├── index.html
-├── package.json
-├── postcss.config.js
-├── README.md
-└── vite.config.js
-```
+- React
+- Vite
+- TailwindCSS
+- React Router DOM
+- React Toastify
+- JSON Server
+- ESLint + Prettier
 
 ## 🛠️ Prerrequisitos
 
 Asegúrate de tener instalado Node.js (se recomienda la versión 18 o superior).
+
+## ⚙️ Configuración de Variables de Entorno
+
+Antes de ejecutar el proyecto, necesitas configurar las variables de entorno.
+
+1.  Crea un archivo `.env` en la raíz del proyecto, copiando el contenido de `.env.example`.
+2.  Modifica la variable `VITE_API_URL` según sea necesario. Para desarrollo local, el valor por defecto `http://localhost:8000` es correcto.
 
 ## 🛠️ Desarrollo Local
 
@@ -65,14 +54,14 @@ Asegúrate de tener instalado Node.js (se recomienda la versión 18 o superior).
    npm install
    ```
 
-3. **Ejecuta el Backend Simulado (JSON Server):**
+3. **Ejecuta el Backend (JSON Server):**
    - Abre una nueva terminal en la raíz del proyecto.
    - Inicia el servidor que vigilará `db.json` en el puerto 8000.
    ```sh
    npm start
    ```
 
-4. **Ejecuta el Frontend:**
+4. **Ejecuta el Frontend (React):**
    - En otra terminal, desde la raíz del proyecto.
    - Inicia el servidor de desarrollo de Vite (se ejecutará en `http://localhost:5173`):
    ```sh
@@ -80,26 +69,10 @@ Asegúrate de tener instalado Node.js (se recomienda la versión 18 o superior).
    ```
 
 ## ☁️ Despliegue
-
-Para desplegar esta aplicación, necesitas alojar el `json-server` (backend) y la aplicación de React (frontend) por separado.
-
-### Backend en Render
-
-1.  Crea un nuevo **Web Service** en Render y conéctalo a tu repositorio de GitHub.
-2.  Asegúrate de haber añadido `json-server` a tus dependencias en `package.json` y de tener un script `start` (ver recomendación anterior).
-3.  En la configuración del servicio en Render:
-    -   **Build Command**: `npm install`
-    -   **Start Command**: `npm start` (Render lo usará por defecto).
-4.  Despliega el servicio. Render te proporcionará una URL pública para tu API (ej: `https://tu-api.onrender.com`).
-
-### Frontend en Vercel
-
-1.  Crea un nuevo **Project** en Vercel e importa el mismo repositorio de GitHub.
-2.  Vercel detectará que es un proyecto Vite.
-3.  Ve a la configuración del proyecto y añade una **Variable de Entorno**:
-    -   **Name**: `VITE_API_URL`
-    -   **Value**: La URL de tu backend desplegado en Render.
-4.  Despliega. ¡Tu aplicación de React estará en línea y conectada a tu API!
+ 
+El frontend de este proyecto está desplegado en **Netlify** y el backend (JSON Server) en **Railway**.
+ 
+Para desplegar tu propia versión, puedes seguir guías similares a las descritas para Vercel/Render, pero aplicando la configuración en Netlify/Railway. Recuerda configurar la variable de entorno `VITE_API_URL` en el servicio de frontend para que apunte a la URL de tu backend desplegado.
 
 ## 👤 Usuarios de prueba
 
