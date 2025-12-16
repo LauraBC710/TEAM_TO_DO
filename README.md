@@ -48,6 +48,10 @@ team-to-do/
 └── vite.config.js
 ```
 
+## 🛠️ Prerrequisitos
+
+Asegúrate de tener instalado Node.js (se recomienda la versión 18 o superior).
+
 ## 🛠️ Desarrollo Local
 
 1. **Clona el repositorio:**
@@ -56,27 +60,20 @@ team-to-do/
    cd team-to-do
    ```
 
-2. **Instala las dependencias del Frontend:**
+2. **Instala las dependencias:**
    ```sh
    npm install
    ```
 
-3. **Instala las dependencias y ejecuta el Backend:**
-   - Navega a la carpeta del backend:
-     ```sh
-     cd backend
-     ```
-   - Instala sus dependencias:
-     ```sh
-     npm install
-     ```
-   - Inicia el servidor API (se ejecutará en `http://localhost:8000`):
-     ```sh
-     npm start
-     ```
+3. **Ejecuta el Backend Simulado (JSON Server):**
+   - Abre una nueva terminal en la raíz del proyecto.
+   - Inicia el servidor que vigilará `db.json` en el puerto 8000.
+   ```sh
+   npm start
+   ```
 
 4. **Ejecuta el Frontend:**
-   - Vuelve a la carpeta raíz del proyecto.
+   - En otra terminal, desde la raíz del proyecto.
    - Inicia el servidor de desarrollo de Vite (se ejecutará en `http://localhost:5173`):
    ```sh
    npm run dev
@@ -84,16 +81,16 @@ team-to-do/
 
 ## ☁️ Despliegue
 
-Esta aplicación está preparada para un despliegue separado del frontend y el backend.
+Para desplegar esta aplicación, necesitas alojar el `json-server` (backend) y la aplicación de React (frontend) por separado.
 
 ### Backend en Render
 
 1.  Crea un nuevo **Web Service** en Render y conéctalo a tu repositorio de GitHub.
-2.  En la configuración:
-    -   **Root Directory**: `backend`
+2.  Asegúrate de haber añadido `json-server` a tus dependencias en `package.json` y de tener un script `start` (ver recomendación anterior).
+3.  En la configuración del servicio en Render:
     -   **Build Command**: `npm install`
-    -   **Start Command**: `npm start`
-3.  Despliega el servicio. Render te proporcionará una URL pública para tu API (ej: `https://tu-api.onrender.com`).
+    -   **Start Command**: `npm start` (Render lo usará por defecto).
+4.  Despliega el servicio. Render te proporcionará una URL pública para tu API (ej: `https://tu-api.onrender.com`).
 
 ### Frontend en Vercel
 
@@ -102,7 +99,7 @@ Esta aplicación está preparada para un despliegue separado del frontend y el b
 3.  Ve a la configuración del proyecto y añade una **Variable de Entorno**:
     -   **Name**: `VITE_API_URL`
     -   **Value**: La URL de tu backend desplegado en Render.
-4.  Despliega. ¡Tu aplicación estará en línea!
+4.  Despliega. ¡Tu aplicación de React estará en línea y conectada a tu API!
 
 ## 👤 Usuarios de prueba
 
@@ -134,13 +131,23 @@ Esta aplicación está preparada para un despliegue separado del frontend y el b
 - [React Router DOM](https://reactrouter.com/)
 - [React Toastify](https://fkhadra.github.io/react-toastify/)
 - [ESLint](https://eslint.org/) + [Prettier](https://prettier.io/)
-- [JSON Server](https://github.com/typicode/json-server)
-- [Axios](https://axios-http.com/)
 
+## 📄 Licencia
 
+Este proyecto está bajo la **Licencia MIT**. Esto significa que cualquiera que tenga acceso a este repositorio es libre de usar, copiar, modificar, distribuir como desee.
 
+Para más detalles, consulta el archivo `LICENSE`.
 
+## 🤝 Contribuciones
 
-Autor: LAURA BURITICA 
+Las contribuciones, problemas y solicitudes de características son bienvenidas.
 
-¡Contribuciones y sugerencias son bienvenidas!
+1.  **Fork** el proyecto.
+2.  Crea tu rama de característica (`git checkout -b feature/AmazingFeature`).
+3.  Confirma tus cambios (`git commit -m 'Add some AmazingFeature'`).
+4.  Empuja a la rama (`git push origin feature/AmazingFeature`).
+5.  Abre una **Pull Request**.
+
+---
+
+Autor: **LAURA BURITICA**
